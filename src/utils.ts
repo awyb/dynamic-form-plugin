@@ -1,16 +1,16 @@
 /**
  * 动态表单插件 — 工具函数
  */
-import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-import type { FormNode, FieldConfig } from './types'
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+import type { FormNode, FieldConfig } from "./types";
 
 // ═══════════════════════════════════════════════════
 // CSS 类名合并 (等同于 @/lib/utils 的 cn)
 // ═══════════════════════════════════════════════════
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 // ═══════════════════════════════════════════════════
@@ -22,19 +22,22 @@ export function cn(...inputs: ClassValue[]) {
  * 用于批量回填数据、批量注册等场景。
  */
 export function collectAllFlds(schema: FormNode): FieldConfig[] {
-  const result: FieldConfig[] = []
+  const result: FieldConfig[] = [];
 
   const traverse = (node: FormNode) => {
-    if (node.type === 'control' && node.flds) {
-      result.push(...node.flds)
+    if (node.type === "control" && node.flds) {
+      result.push(...node.flds);
     }
-    if ((node.type === 'container' || node.type === 'default') && node.children) {
-      node.children.forEach(traverse)
+    if (
+      (node.type === "container" || node.type === "default") &&
+      node.children
+    ) {
+      node.children.forEach(traverse);
     }
-  }
+  };
 
-  traverse(schema)
-  return result
+  traverse(schema);
+  return result;
 }
 
 // ═══════════════════════════════════════════════════
@@ -55,9 +58,11 @@ export function buildFld(fld: FieldConfig): FieldConfig {
     ...fld,
     maxlen: fld.maxlen ?? (fld.isnum === 1 ? 10 : 24),
     minlen: fld.minlen ?? 0,
-    controlclass: 'w-24 pl-2 rounded-none disabled:cursor-default' + (fld.controlclass ?? ''),
-    labelclass: fld.labelclass ?? '',
-  }
+    controlclass:
+      "w-24 pl-2 rounded-none disabled:cursor-default " +
+      (fld.controlclass ?? ""),
+    labelclass: fld.labelclass ?? "",
+  };
 }
 
 // ═══════════════════════════════════════════════════
@@ -70,25 +75,25 @@ export function buildFld(fld: FieldConfig): FieldConfig {
  * 例如 generateName('Bus', ['Bus', 'Bus2']) → 'Bus1'
  */
 export function generateName(base: string, usedNames: string[]): string {
-  const usedSet = new Set(usedNames)
-  if (!usedSet.has(base)) return base
+  const usedSet = new Set(usedNames);
+  if (!usedSet.has(base)) return base;
 
-  const usedIndices: number[] = []
+  const usedIndices: number[] = [];
   for (const name of usedSet) {
-    if (name === base) continue
-    const match = name.match(new RegExp(`^${escapeRegex(base)}(\\d+)$`))
-    if (match) usedIndices.push(Number(match[1]))
+    if (name === base) continue;
+    const match = name.match(new RegExp(`^${escapeRegex(base)}(\\d+)$`));
+    if (match) usedIndices.push(Number(match[1]));
   }
 
-  usedIndices.sort((a, b) => a - b)
-  let index = 1
+  usedIndices.sort((a, b) => a - b);
+  let index = 1;
   for (const used of usedIndices) {
-    if (used !== index) break
-    index++
+    if (used !== index) break;
+    index++;
   }
-  return base + index
+  return base + index;
 }
 
 function escapeRegex(s: string) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

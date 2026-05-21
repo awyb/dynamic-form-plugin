@@ -21,7 +21,7 @@ const allTypesSchema: FormNode = {
     {
       type: "container",
       key: "sect_type0",
-      label: "type=0 — 只读展示",
+      label: "外部边框",
       children: [
         {
           type: "control",
@@ -32,20 +32,10 @@ const allTypesSchema: FormNode = {
               label: "计算值",
               type: 0,
               isnum: 0,
-              value: "1.05 p.u.",
-              controlclass: "text-blue-600 font-medium",
+              controlclass: "text-red-600 font-mono",
             }),
           ],
         },
-      ],
-    },
-
-    // ──── type=1 文本/数字输入 ────
-    {
-      type: "container",
-      key: "sect_type1",
-      label: "type=1 — 文本/数字输入框",
-      children: [
         {
           type: "control",
           key: "row_text",
@@ -63,190 +53,206 @@ const allTypesSchema: FormNode = {
           ],
         },
         {
-          type: "control",
-          key: "row_number",
-          flds: [
-            buildFld({
-              name: "uknom",
-              label: "额定电压",
-              unit: "kV",
-              type: 1,
-              isnum: 1,
-              required: 1,
-              maxlen: 10,
-            }),
-          ],
-        },
-        {
-          type: "control",
-          key: "row_disabled",
-          flds: [
-            buildFld({
-              name: "disabled_input",
-              label: "禁用输入",
-              unit: "",
-              type: 1,
-              isnum: 0,
-              controlclass: "w-40",
-              disabled: true,
-              value: "不可编辑",
-            }),
-          ],
-        },
-      ],
-    },
-
-    // ──── type=2 下拉选择 ────
-    {
-      type: "container",
-      key: "sect_type2",
-      label: "type=2 — 下拉选择框",
-      children: [
-        {
-          type: "control",
-          key: "row_select_str",
-          flds: [
-            buildFld({
-              name: "loss_assign",
-              label: "损耗分配",
-              type: 2,
-              isnum: 1,
-              controlclass: "w-48",
-              options: [
-                { value: "0", name: "按分组" },
-                { value: "1", name: "均匀分布" },
-                { value: "2", name: "到 I 侧" },
-                { value: "3", name: "到 J 侧" },
+          type: "container",
+          key: "sect_type1",
+          label: "type=1 — 文本/数字输入框",
+          children: [
+            {
+              type: "control",
+              key: "row_number",
+              flds: [
+                buildFld({
+                  name: "uknom",
+                  label: "额定电压",
+                  unit: "kV",
+                  type: 1,
+                  isnum: 1,
+                  required: 1,
+                  maxlen: 10,
+                }),
               ],
-            }),
-          ],
-        },
-        {
-          type: "control",
-          key: "row_select_disabled",
-          flds: [
-            buildFld({
-              name: "disabled_select",
-              label: "(禁用)",
-              type: 2,
-              isnum: 0,
-              controlclass: "w-40",
-              disabled: true,
-              options: [
-                { value: "a", name: "选项 A" },
-                { value: "b", name: "选项 B" },
+            },
+            {
+              type: "control",
+              key: "row_disabled",
+              flds: [
+                buildFld({
+                  name: "disabled_input",
+                  label: "禁用输入",
+                  unit: "",
+                  type: 1,
+                  isnum: 0,
+                  controlclass: "w-40",
+                  disabled: true,
+                }),
               ],
-              value: "a",
-            }),
-          ],
-        },
-      ],
-    },
-
-    // ──── type=3 复选框 ────
-    {
-      type: "container",
-      key: "sect_type3",
-      label: "type=3 — 复选框",
-      children: [
-        {
-          type: "control",
-          key: "row_checkbox1",
-          flds: [
-            buildFld({
-              name: "outserv",
-              label: "",
-              type: 3,
-              isnum: 1,
-              labelclass: "w-0",
-              extendcontrol: <span className="ml-2">退出运行</span>,
-            }),
+            },
           ],
         },
         {
-          type: "control",
-          key: "row_checkbox2",
-          flds: [
-            buildFld({
-              name: "vstep_change",
-              label: "",
-              type: 3,
-              isnum: 1,
-              labelclass: "w-0",
-              value: 1,
-              extendcontrol: <span className="ml-2">允许电压阶跃变化</span>,
-            }),
-          ],
-        },
-        {
-          type: "control",
-          key: "row_checkbox3",
-          flds: [
-            buildFld({
-              name: "auto_tap",
-              label: "",
-              type: 3,
-              isnum: 1,
-              labelclass: "w-0",
-              checkedClassName: "data-[state=checked]:bg-green-600",
-              extendcontrol: (
-                <span className="ml-2 text-green-700">
-                  自动调压 (自定义颜色)
-                </span>
-              ),
-            }),
-          ],
-        },
-      ],
-    },
-
-    // ──── type=4 单选组 ────
-    {
-      type: "container",
-      key: "sect_type4",
-      label: "type=4 — 单选组",
-      // props: { mclassName: 'flex' },
-      children: [
-        {
-          type: "control",
-          key: "row_radio1",
-          // props: { className: 'items-start' },
-          flds: [
-            buildFld({
-              name: "iopt_net",
-              label: "",
-              type: 4,
-              isnum: 1,
-              labelclass: "w-0",
-              className: "h-auto leading-tight ",
-              options: [
-                { name: "AC 潮流 (平衡正序)", value: "0" },
-                { name: "AC 潮流 (不平衡三相)", value: "1" },
-                { name: "DC 潮流 (线性)", value: "2", disabled: 1 },
+          type: "container",
+          key: "sect_type2",
+          label: "type=2 — 下拉选择框",
+          children: [
+            {
+              type: "control",
+              key: "row_select_str",
+              flds: [
+                buildFld({
+                  name: "loss_assign",
+                  label: "损耗分配",
+                  type: 2,
+                  isnum: 1,
+                  controlclass: "w-48",
+                  options: [
+                    { value: "0", name: "按分组" },
+                    { value: "1", name: "均匀分布" },
+                    { value: "2", name: "到 I 侧" },
+                    { value: "3", name: "到 J 侧" },
+                  ],
+                }),
               ],
-            }),
+            },
+            {
+              type: "control",
+              key: "row_select_disabled",
+              flds: [
+                buildFld({
+                  name: "disabled_select",
+                  label: "(禁用)",
+                  type: 2,
+                  isnum: 0,
+                  controlclass: "w-40",
+                  disabled: true,
+                  options: [
+                    { value: "a", name: "选项 A" },
+                    { value: "b", name: "选项 B" },
+                  ],
+                }),
+              ],
+            },
           ],
         },
         {
-          type: "control",
-          key: "row_radio2",
-          flds: [
-            buildFld({
-              name: "fault_type",
-              label: "故障类型",
-              type: 4,
-              isnum: 0,
-              labelclass: "w-24",
-              className: "space-y-1 h-auto ",
-              radioClassName: "border-red-500 data-[state=checked]:bg-red-100",
-              labelClassName: "font-medium",
-              options: [
-                { name: "单相接地", value: "SLG" },
-                { name: "两相短路", value: "LL" },
-                { name: "三相短路", value: "3PH" },
-                { name: "两相接地", value: "DLG" },
+          type: "container",
+          key: "sect_type3",
+          label: "type=3 — 复选框",
+          props: { className: "w-2/3" },
+          children: [
+            {
+              type: "control",
+              key: "row_checkbox1",
+              flds: [
+                buildFld({
+                  name: "outserv",
+                  label: "",
+                  type: 3,
+                  isnum: 1,
+                  labelclass: "w-0",
+                  extendcontrol: <span className="ml-2">退出运行</span>,
+                }),
               ],
-            }),
+            },
+            {
+              type: "control",
+              key: "row_checkbox2",
+              flds: [
+                buildFld({
+                  name: "vstep_change",
+                  label: "",
+                  type: 3,
+                  isnum: 1,
+                  labelclass: "w-0",
+                  extendcontrol: <span className="ml-2">允许电压阶跃变化</span>,
+                }),
+              ],
+            },
+            {
+              type: "control",
+              key: "row_checkbox3",
+              flds: [
+                buildFld({
+                  name: "auto_tap",
+                  label: "",
+                  type: 3,
+                  isnum: 1,
+                  labelclass: "w-0",
+                  checkedClassName: "data-[state=checked]:bg-green-600",
+                  extendcontrol: (
+                    <span className="ml-2 text-green-700">
+                      自动调压 (自定义颜色)
+                    </span>
+                  ),
+                }),
+              ],
+            },
+          ],
+        },
+        {
+          type: "default",
+          key: "root-1",
+          label: "",
+          props: { className: "flex space-x-2" },
+          children: [
+            {
+              type: "container",
+              key: "sect_type4-1",
+              label: "type=4 — 单选组1",
+              // props: { mclassName: 'flex' },
+              children: [
+                {
+                  type: "control",
+                  key: "row_radio1",
+                  // props: { className: 'items-start' },
+                  flds: [
+                    buildFld({
+                      name: "iopt_net",
+                      label: "",
+                      type: 4,
+                      isnum: 1,
+                      labelclass: "w-0",
+                      className: "h-auto leading-tight ",
+                      options: [
+                        { name: "AC 潮流 (平衡正序)", value: "0" },
+                        { name: "AC 潮流 (不平衡三相)", value: "1" },
+                        { name: "DC 潮流 (线性)", value: "2", disabled: 1 },
+                      ],
+                    }),
+                  ],
+                },
+              ],
+            },
+            {
+              type: "container",
+              key: "sect_type4-2",
+              label: "type=4 — 单选组2",
+              // props: { mclassName: 'flex' },
+              children: [
+                {
+                  type: "control",
+                  key: "row_radio2",
+                  flds: [
+                    buildFld({
+                      name: "fault_type",
+                      label: "故障类型",
+                      type: 4,
+                      isnum: 0,
+                      labelclass: "w-24",
+                      className: "space-y-1 h-auto ",
+                      radioClassName:
+                        "border-red-500 data-[state=checked]:bg-red-100",
+                      labelClassName: "font-medium",
+                      options: [
+                        { name: "单相接地", value: "SLG" },
+                        { name: "两相短路", value: "LL" },
+                        { name: "三相短路", value: "3PH" },
+                        { name: "两相接地", value: "DLG" },
+                      ],
+                    }),
+                  ],
+                },
+              ],
+            },
           ],
         },
       ],
@@ -327,7 +333,6 @@ const allTypesSchema: FormNode = {
               isnum: 0,
               labelclass: "w-24",
               controlclass: "w-40",
-              value: "1",
             }),
           ],
         },
@@ -342,7 +347,6 @@ const allTypesSchema: FormNode = {
               isnum: 0,
               labelclass: "w-24",
               controlclass: "w-40",
-              value: "4",
             }),
           ],
         },
@@ -366,7 +370,6 @@ const allTypesSchema: FormNode = {
               isnum: 0,
               labelclass: "w-24",
               controlclass: "w-40",
-              value: "1",
             }),
           ],
         },
@@ -390,7 +393,6 @@ const allTypesSchema: FormNode = {
               isnum: 0,
               labelclass: "w-24",
               controlclass: "w-40",
-              value: "60",
             }),
           ],
         },
@@ -416,7 +418,6 @@ const allTypesSchema: FormNode = {
               controlclass: "w-12",
               minlen: -16,
               maxlen: 16,
-              value: 0,
             }),
           ],
         },
@@ -606,6 +607,7 @@ const allTypesSchema: FormNode = {
 // ═══════════════════════════════════════════════════
 
 const allTypesDefaults = {
+  readonly_field: "3.1415926",
   loc_name: "Bus-001",
   uknom: 110,
   disabled_input: "不可编辑",
@@ -648,72 +650,85 @@ export function AllTypesDemo() {
   const [result, setResult] = useState<Record<string, any> | null>(null);
 
   return (
-    <div className="p-6 space-y-6 max-w-3xl mx-auto">
-      <header className="border-b pb-3">
-        <h1 className="text-xl font-bold">DynamicForm 全部控件类型演示</h1>
-        <p className="text-xs text-gray-500 mt-1">
-          覆盖 type=0 至 type=12 + type=999，共 13 种控件类型
-        </p>
+    <div className="flex flex-col w-full h-screen overflow-hidden bg-gray-100">
+      {/* 顶部标题栏 */}
+      <header className="flex-none px-6 py-3 bg-white border-b shadow-sm">
+        <h1 className="text-lg font-semibold text-gray-800">
+          动态表单插件 — 全部控件类型演示
+        </h1>
       </header>
 
-      {/* 表单渲染 */}
-      <div className="border rounded-md bg-white p-4 shadow-sm">
-        <DynamicForm formInstance={inst} showInlineErrors />
-      </div>
+      {/* 主体 */}
+      <div className="flex flex-1 min-h-0">
+        {/* 左侧表单区 */}
+        <main className="flex-1 flex flex-col min-h-0">
+          {/* 表单渲染区 — 可滚动 */}
+          <div className="flex-1 overflow-y-auto p-6 pb-3">
+            <div className="max-w-4xl mx-auto">
+              <div className="border rounded-md bg-white p-4 shadow-sm">
+                <DynamicForm formInstance={inst} showInlineErrors />
+              </div>
+            </div>
+          </div>
 
-      {/* 操作栏 */}
-      <div className="flex items-center gap-3">
-        <button
-          className="px-4 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-          onClick={async () => {
-            const values = await inst.submit();
-            if (values) {
-              setResult(values);
-              console.log("✅ 校验通过:", values);
-            } else {
-              console.log("❌ 校验失败");
-            }
-          }}
-        >
-          提交全部字段
-        </button>
-        <button
-          className="px-4 py-1.5 bg-gray-200 text-sm rounded hover:bg-gray-300 disabled:opacity-40"
-          disabled={!inst.isDirty}
-          onClick={() => {
-            inst.reset();
-            setResult(null);
-          }}
-        >
-          重置
-        </button>
-        {inst.isDirty && (
-          <span className="text-sm text-amber-600">表单已修改</span>
-        )}
-      </div>
+          {/* 操作栏 — 始终可见 */}
+          <div className="flex-none border-t bg-white px-6 py-3 shadow-sm">
+            <div className="max-w-4xl mx-auto flex items-center gap-3">
+              <button
+                className="px-4 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                onClick={async () => {
+                  const values = await inst.submit();
+                  if (values) {
+                    setResult(values);
+                    console.log("✅ 校验通过:", values);
+                  } else {
+                    console.log("❌ 校验失败");
+                  }
+                }}
+              >
+                提交全部字段
+              </button>
+              <button
+                className="px-4 py-1.5 bg-gray-200 text-sm rounded hover:bg-gray-300 disabled:opacity-40"
+                disabled={!inst.isDirty}
+                onClick={() => {
+                  inst.reset();
+                  setResult(null);
+                }}
+              >
+                重置
+              </button>
+              {inst.isDirty && (
+                <span className="text-sm text-amber-600">表单已修改</span>
+              )}
+            </div>
+          </div>
 
-      {/* 提交结果 */}
-      {result && (
-        <details open className="border rounded-md bg-gray-50">
-          <summary className="px-4 py-2 text-sm font-semibold cursor-pointer hover:bg-gray-100">
-            提交结果 (全部字段)
-          </summary>
-          <pre className="p-4 text-xs overflow-auto max-h-80 whitespace-pre-wrap">
-            {JSON.stringify(result, null, 2)}
-          </pre>
-        </details>
-      )}
-
-      {/* 控件类型速查表 */}
-      <details className="border rounded-md bg-gray-50">
-        <summary className="px-4 py-2 text-sm font-semibold cursor-pointer hover:bg-gray-100">
-          控件类型速查表 (type → 控件)
-        </summary>
-        <div className="p-4 overflow-x-auto">
-          <table className="w-full text-xs border-collapse">
+          {/* 提交结果 — 独立面板 */}
+          {result && (
+            <div className="flex-none border-t bg-gray-50 px-6 py-3">
+              <div className="max-w-4xl mx-auto">
+                <details open className="border rounded-md bg-white">
+                  <summary className="px-4 py-2 text-sm font-semibold cursor-pointer hover:bg-gray-100">
+                    提交结果 (全部字段)
+                  </summary>
+                  <pre className="p-4 text-xs overflow-auto max-h-60 whitespace-pre-wrap">
+                    {JSON.stringify(result, null, 2)}
+                  </pre>
+                </details>
+              </div>
+            </div>
+          )}
+        </main>
+        {/* 右侧参考边栏 — 始终展开 */}
+        <aside className="w-1/3 flex-none bg-white border-r overflow-y-auto p-3">
+          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            控件类型速查表
+          </div>
+          <table className="w-full text-[11px] border-collapse">
             <thead>
-              <tr className="bg-gray-200">
-                <th className="border p-1.5 text-left w-16">type</th>
+              <tr className="bg-gray-100">
+                <th className="border p-1.5 text-left w-12">type</th>
                 <th className="border p-1.5 text-left w-24">控件名</th>
                 <th className="border p-1.5 text-left">说明</th>
                 <th className="border p-1.5 text-left">关键属性</th>
@@ -724,7 +739,7 @@ export function AllTypesDemo() {
                 <td className="border p-1.5 font-mono">0</td>
                 <td className="border p-1.5">只读文本</td>
                 <td className="border p-1.5">纯展示，无输入交互</td>
-                <td className="border p-1.5 font-mono text-[11px]">value</td>
+                <td className="border p-1.5 font-mono">value</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-1.5 font-mono">1</td>
@@ -732,7 +747,7 @@ export function AllTypesDemo() {
                 <td className="border p-1.5">
                   文本 / 数字，支持精度、最大最小长度
                 </td>
-                <td className="border p-1.5 font-mono text-[11px]">
+                <td className="border p-1.5 font-mono">
                   isnum, maxlen, minlen, required, disabled, placeholder
                 </td>
               </tr>
@@ -740,7 +755,7 @@ export function AllTypesDemo() {
                 <td className="border p-1.5 font-mono">2</td>
                 <td className="border p-1.5">下拉选择</td>
                 <td className="border p-1.5">单选下拉框</td>
-                <td className="border p-1.5 font-mono text-[11px]">
+                <td className="border p-1.5 font-mono">
                   options[], isnum, disabled
                 </td>
               </tr>
@@ -750,7 +765,7 @@ export function AllTypesDemo() {
                 <td className="border p-1.5">
                   布尔值，推荐搭配 extendcontrol 文字
                 </td>
-                <td className="border p-1.5 font-mono text-[11px]">
+                <td className="border p-1.5 font-mono">
                   extendcontrol, checkedClassName
                 </td>
               </tr>
@@ -758,7 +773,7 @@ export function AllTypesDemo() {
                 <td className="border p-1.5 font-mono">4</td>
                 <td className="border p-1.5">单选组</td>
                 <td className="border p-1.5">多个互斥选项</td>
-                <td className="border p-1.5 font-mono text-[11px]">
+                <td className="border p-1.5 font-mono">
                   options[], radioClassName, labelClassName
                 </td>
               </tr>
@@ -766,7 +781,7 @@ export function AllTypesDemo() {
                 <td className="border p-1.5 font-mono">5,6,7</td>
                 <td className="border p-1.5">空占位</td>
                 <td className="border p-1.5">保留位，渲染为空</td>
-                <td className="border p-1.5 font-mono text-[11px]">-</td>
+                <td className="border p-1.5 font-mono">-</td>
               </tr>
               <tr>
                 <td className="border p-1.5 font-mono">8</td>
@@ -774,7 +789,7 @@ export function AllTypesDemo() {
                 <td className="border p-1.5">
                   折叠菜单 + 跳转按钮，用于选择/新建/编辑模式
                 </td>
-                <td className="border p-1.5 font-mono text-[11px]">
+                <td className="border p-1.5 font-mono">
                   menus[], btnClick, disabledBtn, showMenu, extendcontrol
                 </td>
               </tr>
@@ -782,21 +797,19 @@ export function AllTypesDemo() {
                 <td className="border p-1.5 font-mono">9</td>
                 <td className="border p-1.5">颜色选择</td>
                 <td className="border p-1.5">色块 + 编号的下拉选择器</td>
-                <td className="border p-1.5 font-mono text-[11px]">
-                  colors? (自定义色表)
-                </td>
+                <td className="border p-1.5 font-mono">colors? (自定义色表)</td>
               </tr>
               <tr>
                 <td className="border p-1.5 font-mono">10</td>
                 <td className="border p-1.5">线型选择</td>
                 <td className="border p-1.5">实线/虚线/点线/点划线 SVG 预览</td>
-                <td className="border p-1.5 font-mono text-[11px]">-</td>
+                <td className="border p-1.5 font-mono">-</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-1.5 font-mono">11</td>
                 <td className="border p-1.5">线宽选择</td>
                 <td className="border p-1.5">不同粗细的 SVG 线段预览</td>
-                <td className="border p-1.5 font-mono text-[11px]">-</td>
+                <td className="border p-1.5 font-mono">-</td>
               </tr>
               <tr>
                 <td className="border p-1.5 font-mono">12</td>
@@ -804,22 +817,18 @@ export function AllTypesDemo() {
                 <td className="border p-1.5">
                   ▲▼ 按钮 + 数字输入，适合分接头/档位
                 </td>
-                <td className="border p-1.5 font-mono text-[11px]">
-                  minlen, maxlen
-                </td>
+                <td className="border p-1.5 font-mono">minlen, maxlen</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-1.5 font-mono">999</td>
                 <td className="border p-1.5">自定义</td>
                 <td className="border p-1.5">custom 属性传入任意 ReactNode</td>
-                <td className="border p-1.5 font-mono text-[11px]">
-                  custom (ReactNode)
-                </td>
+                <td className="border p-1.5 font-mono">custom (ReactNode)</td>
               </tr>
             </tbody>
           </table>
-        </div>
-      </details>
+        </aside>
+      </div>
     </div>
   );
 }
