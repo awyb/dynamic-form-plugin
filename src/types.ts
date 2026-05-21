@@ -33,10 +33,10 @@ export interface FieldConfig {
   required?: number;
   /** 是否禁用 */
   disabled?: boolean;
-  /** 是否隐藏 (支持函数) */
-  hide?: boolean | (() => boolean);
-  /** 是否显示 (支持函数, 与 hide 互斥) */
-  show?: boolean | (() => boolean);
+  /** 是否隐藏 (支持函数，接收当前所有表单值) */
+  hide?: boolean | ((values: Record<string, any>) => boolean);
+  /** 是否显示 (支持函数, 与 hide 互斥，接收当前所有表单值) */
+  show?: boolean | ((values: Record<string, any>) => boolean);
   /** 占位文字 */
   placeholder?: string;
   /** 最外层 div 类名 */

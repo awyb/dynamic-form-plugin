@@ -85,8 +85,10 @@ interface FormItemContentProps {
   unit?: string | React.ReactNode;
   labelclass?: string;
   unitclass?: string;
-  hide?: boolean | (() => boolean);
-  show?: boolean | (() => boolean);
+  hide?: boolean | ((values: Record<string, any>) => boolean);
+  show?: boolean | ((values: Record<string, any>) => boolean);
+  /** 当前所有表单值（用于 hide/show 动态判断） */
+  values?: Record<string, any>;
   sectionbox?: string;
   disabled?: boolean;
   className?: string;
@@ -109,9 +111,10 @@ export function FormItemContent({
   unitclass,
   error,
   noHtmlFor,
+  values,
 }: FormItemContentProps) {
-  const isHidden = typeof hide === "function" ? hide() : !!hide;
-  const isShown = typeof show === "function" ? show() : show;
+  const isHidden = typeof hide === "function" ? hide(values ?? {}) : !!hide;
+  const isShown = typeof show === "function" ? show(values ?? {}) : show;
 
   const LabelTag = noHtmlFor ? "span" : FormLabel;
 

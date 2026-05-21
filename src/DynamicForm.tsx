@@ -39,6 +39,7 @@ export function DynamicForm({
     trigger,
     formState: { errors },
   } = form
+  const values = form.watch()
 
   const renderNode = useSchemaRenderer({
     control,
@@ -48,6 +49,7 @@ export function DynamicForm({
     spaceY,
     showInlineErrors,
     onValidationError,
+    values,
   })
 
   return (
@@ -78,6 +80,7 @@ export const DynamicFormPlus = forwardRef<DynamicFormRef, DynamicFormPlusProps>(
       getValues,
       formState: { errors },
     } = form
+    const values = form.watch()
 
     const renderNode = useSchemaRenderer({
       control,
@@ -87,6 +90,7 @@ export const DynamicFormPlus = forwardRef<DynamicFormRef, DynamicFormPlusProps>(
       spaceY,
       showInlineErrors: false,
       onValidationError: defaultOnError,
+      values,
     })
 
     useImperativeHandle(ref, () => ({

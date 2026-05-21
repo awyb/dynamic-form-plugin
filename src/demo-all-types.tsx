@@ -46,7 +46,6 @@ const allTypesSchema: FormNode = {
               type: 1,
               isnum: 0,
               required: 1,
-              // controlclass: 'w-60',
               maxlen: 30,
               placeholder: "请输入名称",
             }),
@@ -110,6 +109,17 @@ const allTypesSchema: FormNode = {
                     { value: "2", name: "到 I 侧" },
                     { value: "3", name: "到 J 侧" },
                   ],
+                }),
+                buildFld({
+                  name: "test_fld",
+                  label: "附加字段",
+                  unit: "kV",
+                  type: 1,
+                  isnum: 1,
+                  labelclass: "ml-4",
+                  show: (values) => values.loss_assign === 0,
+                  required: 1,
+                  maxlen: 10,
                 }),
               ],
             },
@@ -198,12 +208,10 @@ const allTypesSchema: FormNode = {
               type: "container",
               key: "sect_type4-1",
               label: "type=4 — 单选组1",
-              // props: { mclassName: 'flex' },
               children: [
                 {
                   type: "control",
                   key: "row_radio1",
-                  // props: { className: 'items-start' },
                   flds: [
                     buildFld({
                       name: "iopt_net",

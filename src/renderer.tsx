@@ -50,6 +50,7 @@ interface RenderContext {
   spaceY: string;
   showInlineErrors: boolean;
   onValidationError: (fieldName: string, message: string) => void;
+  values: Record<string, any>;
 }
 
 export function useSchemaRenderer(ctx: RenderContext) {
@@ -61,6 +62,7 @@ export function useSchemaRenderer(ctx: RenderContext) {
     spaceY,
     showInlineErrors,
     onValidationError,
+    values,
   } = ctx;
 
   // 单字段失焦校验
@@ -105,6 +107,7 @@ export function useSchemaRenderer(ctx: RenderContext) {
                         disabled={fld.disabled}
                         show={fld.show}
                         hide={fld.hide}
+                        values={values}
                         unit={fld.unit}
                         labelclass={fld.labelclass}
                         unitclass={fld.unitclass}
@@ -208,7 +211,7 @@ export function useSchemaRenderer(ctx: RenderContext) {
 
       return null;
     },
-    [control, errors, precision, spaceY, showInlineErrors, validateOne],
+    [control, errors, precision, spaceY, showInlineErrors, validateOne, values],
   );
 
   return renderNode;
