@@ -178,7 +178,18 @@ const ControlInput = forwardRef<HTMLInputElement, ControlMainProps>(
     const handleChange = isnum
       ? (e: React.ChangeEvent<HTMLInputElement>) => {
           const raw = e.target.value;
-          onChange?.(raw === "" ? "" : Number(raw));
+          // 过滤非数字字符（保留数字、小数点、负号）
+          const filtered = raw.replace(/[^\d.-]/g, "");
+          if (filtered === "") {
+            onChange?.("");
+          } else if (filtered === "-" || filtered === ".") {
+            onChange?.(filtered);
+          } else {
+            const num = Number(filtered);
+            if (!isNaN(num)) {
+              onChange?.(num);
+            }
+          }
         }
       : onChange;
 
