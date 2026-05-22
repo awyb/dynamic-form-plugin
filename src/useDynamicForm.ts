@@ -20,7 +20,7 @@
  * const values = await inst.submit()
  * ```
  */
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useMemo } from 'react'
 import { useForm, FieldValues } from 'react-hook-form'
 import { collectAllFlds } from './utils'
 import type { UseDynamicFormOptions, UseDynamicFormReturn } from './types'
@@ -32,28 +32,44 @@ export function useDynamicForm<T extends FieldValues = Record<string, any>>(
 ): UseDynamicFormReturn<T> {
   const { schema, defaultValues, data, validate, autoBackfill = true } = options
 
+  // 同步合并初始 data 到默认值，避免 effect 异步回填导致「先显示 defaultValues，再跳变为 data」
+  const initialValues = useMemo(() => {
+    if (!autoBackfill || !data) return defaultValues
+    const flds = collectAllFlds(schema)
+    const v: Record<string, any> = {}
+    for (const f of flds) {
+      if (data[f.name] !== undefined) v[f.name] = data[f.name]
+    }
+    if (Object.keys(v).length === 0) return defaultValues
+    return { ...(defaultValues ?? {}), ...v }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const form = useForm<T>({
-    defaultValues: defaultValues as any,
+    defaultValues: initialValues as any,
     mode: 'onBlur',
   })
-
-  // 手动 deep-dirty：用 watch() 订阅所有字段变化，然后与 defaultValues 做浅层比较
-  // 这比依赖 formState.isDirty 的 Proxy 订阅更可靠
 
   const { formState } = form
   const isSubmitting = formState.isSubmitting
   const errors = formState.errors
   const currentValues = form.watch()
-  const defaults = (defaultValues ?? {}) as Record<string, any>
-  const isDirty = Object.keys(currentValues).some(key => currentValues[key] !== defaults[key])
-  // 跟踪上次回填的 data 引用，避免重复
-  const prevDataRef = useRef<Record<string, any> | null | undefined>(undefined)
+  // 脏检测的基准值，回填后同步更新
+  const baselineRef = useRef<Record<string, any>>((initialValues ?? {}) as Record<string, any>)
+  const baseline = baselineRef.current
+  const isDirty = Object.keys(currentValues).some(key => currentValues[key] !== baseline[key])
+  // 首轮已通过 initialValues 合并，这里预填 key 跳过 effect 首轮重复执行
+  const initKey =
+    autoBackfill && data ? JSON.stringify(initialValues) : ""
+  const lastBackfillKeyRef = useRef<string>(initKey)
+  // 追踪最近一次回填后的合并值，reset 时直接跳到该值而非 defaultValues
+  const currentMergedRef = useRef<Record<string, any> | null>(
+    initialValues !== defaultValues ? (initialValues as Record<string, any>) : null
+  )
 
   // ── 自动回填 ──
   useEffect(() => {
     if (!autoBackfill || !data) return
-    if (prevDataRef.current === data) return
-    prevDataRef.current = data
 
     const flds = collectAllFlds(schema)
     const values: Record<string, any> = {}
@@ -64,9 +80,16 @@ export function useDynamicForm<T extends FieldValues = Record<string, any>>(
     }
 
     if (Object.keys(values).length > 0) {
-      form.reset({ ...defaultValues, ...values } as any, { keepDirty: false })
+      const merged = { ...defaultValues, ...values }
+      const key = JSON.stringify(merged)
+      if (lastBackfillKeyRef.current === key) return
+      lastBackfillKeyRef.current = key
+
+      form.reset(merged as any, { keepDirty: false })
+      baselineRef.current = merged as Record<string, any>
+      currentMergedRef.current = merged as Record<string, any>
     }
-  }, [data, schema, autoBackfill])
+  }, [data, schema, autoBackfill, defaultValues])
 
   // ── 提交 ──
   const submit = useCallback(async (): Promise<T | null> => {
@@ -89,8 +112,12 @@ export function useDynamicForm<T extends FieldValues = Record<string, any>>(
 
   // ── 重置 ──
   const reset = useCallback(() => {
-    form.reset(defaultValues as any)
-    prevDataRef.current = undefined
+    const target = currentMergedRef.current ?? (defaultValues ?? {})
+    form.reset(target as any)
+    baselineRef.current = target as Record<string, any>
+    lastBackfillKeyRef.current = currentMergedRef.current
+      ? JSON.stringify(currentMergedRef.current)
+      : ""
   }, [form, defaultValues])
 
   return { form, schema, submit, reset, isDirty, isSubmitting, errors }

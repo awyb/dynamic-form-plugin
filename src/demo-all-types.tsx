@@ -695,6 +695,9 @@ export function AllTypesDemo() {
   const inst = useDynamicForm({
     schema: allTypesSchema,
     defaultValues: allTypesDefaults,
+    data: {
+      loc_name: "test",
+    },
   });
 
   const [result, setResult] = useState<Record<string, any> | null>(null);
