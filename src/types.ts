@@ -57,6 +57,11 @@ export interface FieldConfig {
     extendcontrol?: ReactNode;
     className?: string;
   }[];
+  /**
+   * 动态属性计算（根据当前表单值动态覆盖字段属性）。
+   * 返回的对象会合并到当前字段上，覆盖静态声明的同名字段。
+   */
+  compute?: (values: Record<string, any>) => Partial<FieldConfig>;
   /** 自定义校验规则 */
   validate?:
     | Record<string, any>

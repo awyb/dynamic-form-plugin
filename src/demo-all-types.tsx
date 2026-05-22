@@ -282,12 +282,22 @@ const allTypesSchema: FormNode = {
                       isnum: 0,
                       labelclass: "w-24",
                       controlclass: "w-0",
-                      extendcontrol: (
-                        <span className="text-red-600 font-mono">
-                          (仅单相接地时显示)
-                        </span>
-                      ),
-                      show: (values) => values.fault_type === "LL",
+                      // extendcontrol: (
+                      //   <span className="text-red-600 font-mono">
+                      //     (仅单相接地时显示)
+                      //   </span>
+                      // ),
+                      compute: (values) => ({
+                        extendcontrol:
+                          values.fault_type === "SLG" ? (
+                            <span className="text-red-600 font-mono">
+                              (仅单相接地时显示)
+                            </span>
+                          ) : (
+                            <>123</>
+                          ),
+                      }),
+                      // show: (values) => values.fault_type === "LL",
                     }),
                   ],
                 },

@@ -95,28 +95,32 @@ export function useSchemaRenderer(ctx: RenderContext) {
             {schema.flds.map((fld) => {
               const fieldError = errors[fld.name];
 
+              // 动态属性合并
+              const dynFld = fld.compute
+                ? { ...fld, ...fld.compute(values) }
+                : fld;
               return (
-                <div key={fld.name} className="flex flex-col">
+                <div key={dynFld.name} className="flex flex-col">
                   <FormField
                     control={control}
-                    name={fld.name}
-                    rules={buildRules(fld)}
+                    name={dynFld.name}
+                    rules={buildRules(dynFld)}
                     render={({ field }) => (
                       <FormItemContent
-                        label={fld.label ?? fld.name}
-                        disabled={fld.disabled}
-                        show={fld.show}
-                        hide={fld.hide}
+                        label={dynFld.label ?? dynFld.name}
+                        disabled={dynFld.disabled}
+                        show={dynFld.show}
+                        hide={dynFld.hide}
                         values={values}
-                        unit={fld.unit}
-                        labelclass={fld.labelclass}
-                        unitclass={fld.unitclass}
-                        className={fld.className}
+                        unit={dynFld.unit}
+                        labelclass={dynFld.labelclass}
+                        unitclass={dynFld.unitclass}
+                        className={dynFld.className}
                         noHtmlFor={
-                          fld.type === 4 ||
-                          fld.type === 8 ||
-                          fld.type === 0 ||
-                          fld.type === 999
+                          dynFld.type === 4 ||
+                          dynFld.type === 8 ||
+                          dynFld.type === 0 ||
+                          dynFld.type === 999
                         }
                         error={
                           showInlineErrors && fieldError
@@ -126,31 +130,31 @@ export function useSchemaRenderer(ctx: RenderContext) {
                         control={
                           <ControlMain
                             {...field}
-                            {...fld}
+                            {...dynFld}
                             precision={precision}
                             onChange={(val: any) => {
                               field.onChange?.(val);
-                              fld.onChange?.(val);
+                              dynFld.onChange?.(val);
                             }}
                             value={
-                              fld.type === 3
+                              dynFld.type === 3
                                 ? Boolean(field.value)
                                 : field.value
                             }
                             onClick={(e: any) => {
-                              if (fld.type === 3 && fld.isnum === 1) {
+                              if (dynFld.type === 3 && dynFld.isnum === 1) {
                                 field.onChange((Number(field.value) + 1) % 2);
                               }
-                              fld.onClick?.(e);
+                              dynFld.onClick?.(e);
                             }}
                             onBlur={(e: any) => {
-                              validateOne(fld.name);
-                              fld.onBlur?.(e);
+                              validateOne(dynFld.name);
+                              dynFld.onBlur?.(e);
                               field.onBlur?.();
                               // 数字输入自动精度处理
                               if (
-                                fld.isnum === 1 &&
-                                fld.type === 1 &&
+                                dynFld.isnum === 1 &&
+                                dynFld.type === 1 &&
                                 e?.target?.value !== "" &&
                                 !isNaN(Number(e.target.value))
                               ) {
