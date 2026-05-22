@@ -105,18 +105,19 @@ const allTypesSchema: FormNode = {
                   controlclass: "w-48",
                   options: [
                     { value: "0", name: "按分组" },
-                    { value: "1", name: "均匀分布" },
-                    { value: "2", name: "到 I 侧" },
+                    { value: "1", name: "均匀分布", disabled: 1 },
+                    { value: "2", name: "到 I 侧", className: "text-blue-600" },
                     { value: "3", name: "到 J 侧" },
                   ],
                 }),
                 buildFld({
                   name: "test_fld",
                   label: "附加字段",
-                  unit: "kV",
+                  unit: "cm",
+                  unitclass: "text-blue-500",
                   type: 1,
                   isnum: 1,
-                  labelclass: "ml-4",
+                  labelclass: "ml-12 w-24",
                   show: (values) => values.loss_assign === 0,
                   required: 1,
                   maxlen: 10,
@@ -222,7 +223,15 @@ const allTypesSchema: FormNode = {
                       className: "h-auto leading-tight ",
                       options: [
                         { name: "AC 潮流 (平衡正序)", value: "0" },
-                        { name: "AC 潮流 (不平衡三相)", value: "1" },
+                        {
+                          name: "AC 潮流 (不平衡三相)",
+                          value: "1",
+                          extendcontrol: (
+                            <span className="text-xs text-green-600 ml-2">
+                              (推荐)
+                            </span>
+                          ),
+                        },
                         { name: "DC 潮流 (线性)", value: "2", disabled: 1 },
                       ],
                     }),
@@ -234,7 +243,7 @@ const allTypesSchema: FormNode = {
               type: "container",
               key: "sect_type4-2",
               label: "type=4 — 单选组2",
-              // props: { mclassName: 'flex' },
+              props: { mclassName: "h-36" },
               children: [
                 {
                   type: "control",
@@ -247,15 +256,38 @@ const allTypesSchema: FormNode = {
                       isnum: 0,
                       labelclass: "w-24",
                       className: "space-y-1 h-auto ",
-                      radioClassName:
-                        "border-red-500 data-[state=checked]:bg-red-100",
+                      radioClassName: "data-[state=checked]:border-red-600",
                       labelClassName: "font-medium",
                       options: [
                         { name: "单相接地", value: "SLG" },
-                        { name: "两相短路", value: "LL" },
+                        {
+                          name: "两相短路",
+                          value: "LL",
+                          className: "text-green-600",
+                        },
                         { name: "三相短路", value: "3PH" },
                         { name: "两相接地", value: "DLG" },
                       ],
+                    }),
+                  ],
+                },
+                {
+                  type: "control",
+                  key: "temp_readonly",
+                  flds: [
+                    buildFld({
+                      name: "temp_readonly",
+                      label: "",
+                      type: 0,
+                      isnum: 0,
+                      labelclass: "w-24",
+                      controlclass: "w-0",
+                      extendcontrol: (
+                        <span className="text-red-600 font-mono">
+                          (仅单相接地时显示)
+                        </span>
+                      ),
+                      show: (values) => values.fault_type === "LL",
                     }),
                   ],
                 },
@@ -340,7 +372,7 @@ const allTypesSchema: FormNode = {
               type: 9,
               isnum: 0,
               labelclass: "w-24",
-              controlclass: "w-40",
+              controlclass: "",
             }),
           ],
         },
@@ -354,7 +386,7 @@ const allTypesSchema: FormNode = {
               type: 9,
               isnum: 0,
               labelclass: "w-24",
-              controlclass: "w-40",
+              controlclass: "",
             }),
           ],
         },
@@ -377,7 +409,7 @@ const allTypesSchema: FormNode = {
               type: 10,
               isnum: 0,
               labelclass: "w-24",
-              controlclass: "w-40",
+              controlclass: "",
             }),
           ],
         },
@@ -400,7 +432,7 @@ const allTypesSchema: FormNode = {
               type: 11,
               isnum: 0,
               labelclass: "w-24",
-              controlclass: "w-40",
+              controlclass: "",
             }),
           ],
         },
@@ -423,7 +455,7 @@ const allTypesSchema: FormNode = {
               type: 12,
               isnum: 1,
               labelclass: "w-24",
-              controlclass: "w-12",
+              controlclass: "",
               minlen: -16,
               maxlen: 16,
             }),
@@ -539,7 +571,7 @@ const allTypesSchema: FormNode = {
               type: 1,
               isnum: 1,
               required: 1,
-              labelclass: "w-0",
+              labelclass: "w-0 ml-16",
             }),
           ],
         },

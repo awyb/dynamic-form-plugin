@@ -142,6 +142,7 @@ export const ControlMain = forwardRef<any, ControlMainProps>((props, ref) => {
           <span className={cn("text-xs", props.controlclass)}>
             {props.value}
           </span>
+          {props.extendcontrol}
         </div>
       );
   }
@@ -243,15 +244,23 @@ const ControlSelect = forwardRef<HTMLButtonElement, ControlMainProps>(
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="z-[9999]">
-            {options.map((opt: { value: any; name: any }) => (
-              <SelectItem
-                key={opt.value}
-                value={opt.value.toString()}
-                className="text-xs pl-2"
-              >
-                {opt.name}
-              </SelectItem>
-            ))}
+            {options.map(
+              (opt: {
+                value: any;
+                name: any;
+                className?: string;
+                disabled?: boolean;
+              }) => (
+                <SelectItem
+                  key={opt.value}
+                  value={opt.value.toString()}
+                  className={cn("text-xs pl-2", opt.className)}
+                  disabled={!!opt.disabled}
+                >
+                  {opt.name}
+                </SelectItem>
+              ),
+            )}
           </SelectContent>
         </Select>
         {extendcontrol}
@@ -320,6 +329,7 @@ const ControlRadioGroup = forwardRef<HTMLButtonElement, ControlMainProps>(
             value: any;
             name: any;
             disabled?: number;
+            className?: string;
             extendcontrol?: any;
           }) => (
             <label
@@ -335,7 +345,7 @@ const ControlRadioGroup = forwardRef<HTMLButtonElement, ControlMainProps>(
                 className={radioClassName}
                 disabled={!!opt.disabled}
               />
-              <span className="text-xs">{opt.name}</span>
+              <span className={cn("text-xs", opt.className)}>{opt.name}</span>
               {opt.extendcontrol}
             </label>
           ),
@@ -384,7 +394,7 @@ const ControlMenuButton = forwardRef<HTMLButtonElement, ControlMainProps>(
                     disabled ? "" : "bg-white hover:bg-gray-100",
                   )}
                 >
-                  {unfoldIcon ?? "…"}
+                  {unfoldIcon ?? "···"}
                 </div>
               </MenubarTrigger>
               <MenubarContent className="z-[9999] min-w-0 rounded-none">
@@ -406,7 +416,7 @@ const ControlMenuButton = forwardRef<HTMLButtonElement, ControlMainProps>(
         <Button
           type="button"
           disabled={!!disabledBtn}
-          className="p-1 h-5 w-6 rounded-none bg-white border ml-0.5 hover:bg-gray-100"
+          className="p-1 h-5 w-6 rounded-none bg-white border ml-0.5 hover:bg-gray-100 text-black"
           onClick={btnClick}
         >
           {arrowIcon ?? "→"}

@@ -151,7 +151,7 @@ export function FormItemContent({
           )}
           {extendcontent}
           {error && (
-            <FormMessage className="text-xs text-red-500 ml-40 mt-0.5">
+            <FormMessage className="text-xs text-red-500 ml-12 flex items-center">
               {error}
             </FormMessage>
           )}

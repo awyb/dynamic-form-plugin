@@ -50,7 +50,13 @@ export interface FieldConfig {
   /** 单位类名 */
   unitclass?: string;
   /** 下拉/单选 选项 */
-  options?: { value: any; name: any; disabled?: number }[];
+  options?: {
+    value: any;
+    name: any;
+    disabled?: number;
+    extendcontrol?: ReactNode;
+    className?: string;
+  }[];
   /** 自定义校验规则 */
   validate?:
     | Record<string, any>
