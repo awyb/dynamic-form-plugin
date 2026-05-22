@@ -1,11 +1,11 @@
-# @whu/dynamic-form-plugin
+# dynamic-form-plugin
 
 声明式动态表单插件 — 基于 react-hook-form + shadcn/ui 的 Schema 驱动表单渲染引擎。
 
 ## 安装
 
 ```bash
-pnpm add @whu/dynamic-form-plugin
+pnpm add dynamic-form-plugin
 ```
 
 ### Peer Dependencies
@@ -28,7 +28,7 @@ pnpm add @whu/dynamic-form-plugin
 // tailwind.config.js
 module.exports = {
   content: [
-    "./node_modules/@whu/dynamic-form-plugin/dist/**/*.js",
+    "./node_modules/dynamic-form-plugin/dist/**/*.js",
     // ...
   ],
 }
@@ -37,7 +37,7 @@ module.exports = {
 ## 快速开始
 
 ```tsx
-import { useDynamicForm, DynamicForm, buildFld } from '@whu/dynamic-form-plugin'
+import { useDynamicForm, DynamicForm, buildFld } from 'dynamic-form-plugin'
 
 // 1. 定义 Schema
 const schema = {
