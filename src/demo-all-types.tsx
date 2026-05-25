@@ -1,7 +1,7 @@
 /**
  * 动态表单插件 — 全部控件类型完整演示
  *
- * 覆盖 type 0~12 + 999，每种控件展示典型配置。
+ * 覆盖 type 0~7 + 8~12 + 999，每种控件展示典型配置。
  * 运行方式：在任意页面引入 <AllTypesDemo />。
  */
 import { useState } from "react";
@@ -82,7 +82,7 @@ const allTypesSchema: FormNode = {
                   type: 1,
                   isnum: 0,
                   controlclass: "w-40",
-                  disabled: true,
+                  disabled: 1,
                 }),
               ],
             },
@@ -134,7 +134,7 @@ const allTypesSchema: FormNode = {
                   type: 2,
                   isnum: 0,
                   controlclass: "w-40",
-                  disabled: true,
+                  disabled: 1,
                   options: [
                     { value: "a", name: "选项 A" },
                     { value: "b", name: "选项 B" },
@@ -308,6 +308,106 @@ const allTypesSchema: FormNode = {
       ],
     },
 
+    // ──── type=5 日期选择 ────
+    {
+      type: "container",
+      key: "sect_type5",
+      label: "type=5 — 日期选择",
+      children: [
+        {
+          type: "control",
+          key: "row_date1",
+          flds: [
+            buildFld({
+              name: "start_date",
+              label: "开工日期",
+              type: 5,
+              isnum: 0,
+              labelclass: "w-24",
+            }),
+          ],
+        },
+        {
+          type: "control",
+          key: "row_date2",
+          flds: [
+            buildFld({
+              name: "end_date",
+              label: "竣工日期",
+              type: 5,
+              isnum: 0,
+              labelclass: "w-24",
+              disabled: 1,
+            }),
+          ],
+        },
+      ],
+    },
+
+    // ──── type=6 日期时间选择 ────
+    {
+      type: "container",
+      key: "sect_type6",
+      label: "type=6 — 日期时间",
+      children: [
+        {
+          type: "control",
+          key: "row_datetime1",
+          flds: [
+            buildFld({
+              name: "fault_time",
+              label: "故障时间",
+              type: 6,
+              isnum: 0,
+              labelclass: "w-24",
+            }),
+          ],
+        },
+      ],
+    },
+
+    // ──── type=7 开关 ────
+    {
+      type: "container",
+      key: "sect_type7",
+      label: "type=7 — 开关",
+      children: [
+        {
+          type: "control",
+          key: "row_switch1",
+          flds: [
+            buildFld({
+              name: "enable_alarm",
+              label: "告警使能",
+              type: 7,
+              isnum: 1,
+              labelclass: "w-24",
+              extendcontrol: (
+                <span className="ml-2 text-xs text-gray-500">启用越限告警</span>
+              ),
+            }),
+          ],
+        },
+        {
+          type: "control",
+          key: "row_switch2",
+          flds: [
+            buildFld({
+              name: "auto_reclose",
+              label: "自动重合闸",
+              type: 7,
+              isnum: 1,
+              labelclass: "w-24",
+              disabled: 1,
+              extendcontrol: (
+                <span className="ml-2 text-xs text-gray-400">(已禁用)</span>
+              ),
+            }),
+          ],
+        },
+      ],
+    },
+
     // ──── type=8 菜单按钮 + 跳转按钮 ────
     {
       type: "container",
@@ -337,7 +437,7 @@ const allTypesSchema: FormNode = {
                 { name: "重置", action: () => alert("已重置") },
               ],
               btnClick: () => alert("编辑当前类型"),
-              disabledBtn: false,
+              disabledBtn: 0,
             }),
           ],
         },
@@ -351,10 +451,10 @@ const allTypesSchema: FormNode = {
               type: 8,
               isnum: 0,
               labelclass: "w-24",
-              disabled: true,
-              showMenu: false,
+              disabled: 1,
+              showMenu: 0,
               btnClick: () => alert("选择元件"),
-              disabledBtn: false,
+              disabledBtn: 0,
               extendcontrol: (
                 <span className="text-xs text-gray-400 ml-2">
                   (仅按钮，无菜单)
@@ -468,6 +568,28 @@ const allTypesSchema: FormNode = {
               controlclass: "",
               minlen: -16,
               maxlen: 16,
+            }),
+          ],
+        },
+      ],
+    },
+
+    // ──── type=13 日期区间 ────
+    {
+      type: "container",
+      key: "sect_type13",
+      label: "type=13 — 日期区间",
+      children: [
+        {
+          type: "control",
+          key: "row_daterange",
+          flds: [
+            buildFld({
+              name: "date_range",
+              label: "检修时段",
+              type: 13,
+              isnum: 0,
+              labelclass: "w-24",
             }),
           ],
         },
@@ -634,7 +756,7 @@ const allTypesSchema: FormNode = {
               label: "(始终隐藏)",
               type: 1,
               isnum: 0,
-              hide: true,
+              hide: 1,
               controlclass: "w-40",
             }),
             buildFld({
@@ -642,7 +764,7 @@ const allTypesSchema: FormNode = {
               label: "显示",
               type: 1,
               isnum: 0,
-              show: true,
+              show: 1,
               controlclass: "w-40",
             }),
           ],
@@ -663,11 +785,17 @@ const allTypesDefaults = {
   disabled_input: "不可编辑",
   loss_assign: 0,
   disabled_select: "a",
+  test_fld: 123,
   outserv: 0,
   vstep_change: 1,
   auto_tap: 0,
   iopt_net: 0,
   fault_type: "3PH",
+  start_date: "2026-05-25",
+  end_date: "2026-06-30",
+  fault_time: "2026-05-25T08:30",
+  enable_alarm: 1,
+  auto_reclose: 0,
   typ_id: "",
   elm_select: "",
   node_color: "1",
@@ -675,6 +803,7 @@ const allTypesDefaults = {
   line_style: "2",
   line_width: "80",
   tap_position: 5,
+  date_range: { start: "2026-05-25", end: "2026-06-30" },
   vtarget: 1.0,
   Vtarget: 110,
   dline: 5.2,
@@ -831,10 +960,24 @@ export function AllTypesDemo() {
                 </td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-1.5 font-mono">5,6,7</td>
-                <td className="border p-1.5">空占位</td>
-                <td className="border p-1.5">保留位，渲染为空</td>
+                <td className="border p-1.5 font-mono">5</td>
+                <td className="border p-1.5">日期选择</td>
+                <td className="border p-1.5">原生 date 输入框</td>
                 <td className="border p-1.5 font-mono">-</td>
+              </tr>
+              <tr>
+                <td className="border p-1.5 font-mono">6</td>
+                <td className="border p-1.5">日期时间</td>
+                <td className="border p-1.5">原生 datetime-local 输入框</td>
+                <td className="border p-1.5 font-mono">-</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-1.5 font-mono">7</td>
+                <td className="border p-1.5">开关</td>
+                <td className="border p-1.5">Radix UI Switch 滑动开关</td>
+                <td className="border p-1.5 font-mono">
+                  disabled, extendcontrol
+                </td>
               </tr>
               <tr>
                 <td className="border p-1.5 font-mono">8</td>
@@ -873,6 +1016,14 @@ export function AllTypesDemo() {
                 <td className="border p-1.5 font-mono">minlen, maxlen</td>
               </tr>
               <tr className="bg-gray-50">
+                <td className="border p-1.5 font-mono">13</td>
+                <td className="border p-1.5">日期区间</td>
+                <td className="border p-1.5">
+                  双原生 date picker，值格式 {`{ start, end }`}
+                </td>
+                <td className="border p-1.5 font-mono">-</td>
+              </tr>
+              <tr>
                 <td className="border p-1.5 font-mono">999</td>
                 <td className="border p-1.5">自定义</td>
                 <td className="border p-1.5">custom 属性传入任意 ReactNode</td>

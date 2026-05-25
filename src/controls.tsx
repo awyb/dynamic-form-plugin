@@ -4,10 +4,11 @@
  * 13 种控件类型，全部自包含。
  * 依赖 shadcn/ui 作为 peer dependency。
  */
-import React, { forwardRef } from "react";
+import React, { forwardRef, useRef } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
+import { Calendar } from "lucide-react";
 import {
   Select,
   SelectValue,
@@ -23,6 +24,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "./ui/menubar";
+import { Switch } from "./ui/switch";
 import { cn } from "./utils";
 import type { FieldConfig } from "./types";
 
@@ -118,6 +120,12 @@ export const ControlMain = forwardRef<any, ControlMainProps>((props, ref) => {
       return <ControlCheckbox {...props} ref={ref} />;
     case 4:
       return <ControlRadioGroup {...props} ref={ref} />;
+    case 5:
+      return <ControlDatePicker {...props} ref={ref} />;
+    case 6:
+      return <ControlDateTimePicker {...props} ref={ref} />;
+    case 7:
+      return <ControlSwitch {...props} ref={ref} />;
     case 8:
       return <ControlMenuButton {...props} ref={ref} />;
     case 9:
@@ -128,6 +136,8 @@ export const ControlMain = forwardRef<any, ControlMainProps>((props, ref) => {
       return <ControlLineWidth {...props} ref={ref} />;
     case 12:
       return <ControlVerticalNumber {...props} ref={ref} />;
+    case 13:
+      return <ControlDateRange {...props} ref={ref} />;
     case 999:
       return (custom ?? null) as any;
     default:
@@ -139,7 +149,7 @@ export const ControlMain = forwardRef<any, ControlMainProps>((props, ref) => {
             props.className0,
           )}
         >
-          <span className={cn("text-xs", props.controlclass)}>
+          <span className={cn("text-xs w-24", props.controlclass)}>
             {props.value}
           </span>
           {props.extendcontrol}
@@ -174,7 +184,6 @@ const ControlInput = forwardRef<HTMLInputElement, ControlMainProps>(
       disabled,
     } = props;
 
-
     return (
       <div className={cn("flex items-center", className0)}>
         <Input
@@ -189,7 +198,7 @@ const ControlInput = forwardRef<HTMLInputElement, ControlMainProps>(
           maxLength={maxlen}
           minLength={minlen}
           placeholder={placeholder ?? `${label}`}
-          className={controlclass}
+          className={cn("w-24", controlclass)}
           autoComplete="off"
         />
         {extendcontrol}
@@ -362,7 +371,7 @@ const ControlMenuButton = forwardRef<HTMLButtonElement, ControlMainProps>(
       menus,
       extendcontrol,
       disabledBtn,
-      showMenu = true,
+      showMenu = 1,
       controlclass,
       className0,
       unfoldIcon,
@@ -447,7 +456,7 @@ const ControlColorPicker = forwardRef<HTMLButtonElement, ControlMainProps>(
             id={id}
             ref={ref}
             className={cn(
-              "w-40 h-6 leading-6 text-xs bg-white rounded-none pl-2",
+              "w-24 h-6 leading-6 text-xs bg-white rounded-none pl-2",
               controlclass,
             )}
           >
@@ -628,7 +637,7 @@ const ControlVerticalNumber = forwardRef<HTMLInputElement, ControlMainProps>(
     return (
       <div
         className={cn(
-          "inline-grid grid-cols-[1fr_auto] items-center border rounded overflow-hidden h-6 min-h-6",
+          "w-16 inline-grid grid-cols-[1fr_auto] items-center border rounded overflow-hidden h-6 min-h-6",
           "bg-white border-gray-300",
           disabled
             ? "bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed"
@@ -679,3 +688,231 @@ const ControlVerticalNumber = forwardRef<HTMLInputElement, ControlMainProps>(
   },
 );
 ControlVerticalNumber.displayName = "ControlVerticalNumber";
+
+// ═══════════════════════════════════════════════════
+// type=5 — 日期选择（下拉风格，点击弹出原生 picker）
+// ═══════════════════════════════════════════════════
+
+const ControlDatePicker = forwardRef<HTMLInputElement, ControlMainProps>(
+  (props, ref) => {
+    const {
+      id,
+      name,
+      value,
+      onChange,
+      onBlur,
+      disabled,
+      controlclass,
+      extendcontrol,
+      className0,
+    } = props;
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+    const handleClick = () => {
+      if (disabled) return;
+      // 点击时弹出浏览器原生日期选择器
+      inputRef.current?.showPicker?.();
+    };
+
+    return (
+      <div className={cn("flex items-center", className0)}>
+        <div className="relative w-40">
+          {/* 隐藏的原生 date input，用于弹出 picker */}
+          <input
+            ref={(el) => {
+              inputRef.current = el;
+            }}
+            type="date"
+            id={id}
+            name={name}
+            value={value ?? ""}
+            onChange={onChange}
+            onBlur={onBlur}
+            disabled={!!disabled}
+            className="absolute inset-0 opacity-0 cursor-pointer"
+            style={{
+              position: "absolute",
+              inset: 0,
+              opacity: 0,
+              cursor: "pointer",
+              zIndex: -1,
+            }}
+          />
+          {/* 下拉风格的可视按钮 */}
+          <div
+            className={cn(
+              "flex items-center h-6 w-full px-2 text-xs border rounded bg-white",
+              disabled
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer hover:border-slate-400",
+              controlclass,
+            )}
+            onClick={handleClick}
+          >
+            <span className="flex-1 truncate">{value || ""}</span>
+            <Calendar className="h-3.5 w-3.5 ml-1 text-gray-400 shrink-0" />
+          </div>
+        </div>
+        {extendcontrol}
+      </div>
+    );
+  },
+);
+ControlDatePicker.displayName = "ControlDatePicker";
+
+// ═══════════════════════════════════════════════════
+// type=6 — 日期时间选择（date + time 双原生 picker）
+// ═══════════════════════════════════════════════════
+
+function parseDT(val: unknown): [string, string] {
+  const s = (val ?? "") as string;
+  const i = s.indexOf("T");
+  if (i < 0) return [s.slice(0, 10), s.slice(11, 16)];
+  return [s.slice(0, i), s.slice(i + 1, i + 6)];
+}
+function joinDT(date: string, time: string): string {
+  if (!date) return "";
+  return time ? `${date}T${time}` : date;
+}
+
+const ControlDateTimePicker = forwardRef<HTMLInputElement, ControlMainProps>(
+  (props, ref) => {
+    const { id, name, value, onChange, disabled, extendcontrol, className0 } =
+      props;
+
+    const [d, t] = parseDT(value);
+
+    return (
+      <div className={cn("flex items-center gap-1", className0)}>
+        <Input
+          type="date"
+          value={d}
+          onChange={(e) => onChange?.(joinDT(e.target.value, t))}
+          disabled={!!disabled}
+          className="w-36 pl-2 rounded-none"
+        />
+        <Input
+          type="time"
+          value={t}
+          onChange={(e) => onChange?.(joinDT(d, e.target.value))}
+          disabled={!!disabled}
+          className="w-28 pl-2 rounded-none"
+        />
+        {extendcontrol}
+      </div>
+    );
+  },
+);
+ControlDateTimePicker.displayName = "ControlDateTimePicker";
+
+// ═══════════════════════════════════════════════════
+// type=7 — 开关（值归一化为 0/1）
+// ═══════════════════════════════════════════════════
+
+const ControlSwitch = forwardRef<HTMLButtonElement, ControlMainProps>(
+  (props, ref) => {
+    const { id, name, value, onChange, disabled, extendcontrol, className0 } =
+      props;
+
+    return (
+      <div className={cn("flex items-center gap-2", className0)}>
+        <Switch
+          id={id}
+          name={name}
+          ref={ref}
+          checked={value === 1 || value === true}
+          onCheckedChange={(checked) => onChange?.(checked ? 1 : 0)}
+          disabled={!!disabled}
+        />
+        {extendcontrol}
+      </div>
+    );
+  },
+);
+ControlSwitch.displayName = "ControlSwitch";
+
+// ═══════════════════════════════════════════════════
+// type=13 — 日期区间选择
+// ═══════════════════════════════════════════════════
+
+const ControlDateRange = forwardRef<HTMLInputElement, ControlMainProps>(
+  (props, ref) => {
+    const {
+      value,
+      onChange,
+      disabled,
+      controlclass,
+      extendcontrol,
+      className0,
+    } = props;
+    const startRef = useRef<HTMLInputElement | null>(null);
+    const endRef = useRef<HTMLInputElement | null>(null);
+
+    const range = (value ?? {}) as { start?: string; end?: string };
+    const startVal = range.start ?? "";
+    const endVal = range.end ?? "";
+
+    return (
+      <div className={cn("flex items-center gap-1", className0)}>
+        <div className="relative w-36">
+          <input
+            ref={startRef}
+            type="date"
+            value={startVal}
+            onChange={(e) => onChange?.({ ...range, start: e.target.value })}
+            disabled={!!disabled}
+            className="absolute inset-0 opacity-0"
+            style={{ position: "absolute", inset: 0, opacity: 0, zIndex: -1 }}
+          />
+          <div
+            className={cn(
+              "flex items-center h-6 w-full px-2 text-xs border rounded bg-white",
+              disabled
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer hover:border-slate-400",
+              controlclass,
+            )}
+            onClick={() => {
+              if (!disabled) startRef.current?.showPicker?.();
+            }}
+          >
+            <span className="flex-1 truncate">{startVal || "开始"}</span>
+            <Calendar className="h-3 w-3 ml-1 text-gray-400 shrink-0" />
+          </div>
+        </div>
+
+        <span className="text-xs text-gray-400 select-none">~</span>
+
+        <div className="relative w-36">
+          <input
+            ref={endRef}
+            type="date"
+            value={endVal}
+            onChange={(e) => onChange?.({ ...range, end: e.target.value })}
+            disabled={!!disabled}
+            className="absolute inset-0 opacity-0"
+            style={{ position: "absolute", inset: 0, opacity: 0, zIndex: -1 }}
+          />
+          <div
+            className={cn(
+              "flex items-center h-6 w-full px-2 text-xs border rounded bg-white",
+              disabled
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer hover:border-slate-400",
+              controlclass,
+            )}
+            onClick={() => {
+              if (!disabled) endRef.current?.showPicker?.();
+            }}
+          >
+            <span className="flex-1 truncate">{endVal || "结束"}</span>
+            <Calendar className="h-3 w-3 ml-1 text-gray-400 shrink-0" />
+          </div>
+        </div>
+
+        {extendcontrol}
+      </div>
+    );
+  },
+);
+ControlDateRange.displayName = "ControlDateRange";

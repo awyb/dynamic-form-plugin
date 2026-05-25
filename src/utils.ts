@@ -59,9 +59,9 @@ export function buildFld(fld: FieldConfig): FieldConfig {
     maxlen: fld.maxlen ?? (fld.isnum === 1 ? 10 : 24),
     minlen: fld.minlen ?? 0,
     controlclass:
-      "w-24 pl-2 rounded-none disabled:cursor-default " +
-      (fld.controlclass ?? ""),
+      "pl-2 rounded-none disabled:cursor-default " + (fld.controlclass ?? ""),
     labelclass: fld.labelclass ?? "",
+    show: fld.show === undefined ? 1 : fld.show,
   };
 }
 

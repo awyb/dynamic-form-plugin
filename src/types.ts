@@ -15,10 +15,10 @@ import type { UseFormReturn, FieldValues } from "react-hook-form";
 export interface FieldConfig {
   /** 字段名（对应表单数据的 key） */
   name: string;
-  /** 控件类型 (0=只读文本, 1=输入框, 2=下拉框, 3=勾选框, 4=单选组, 8=菜单按钮, 9=颜色, 10=线型, 11=线宽, 12=垂直数字输入, 999=自定义) */
+  /** 控件类型 (0=只读文本, 1=输入框, 2=下拉框, 3=勾选框, 4=单选组, 5=日期选择, 6=日期时间, 7=开关, 8=菜单按钮, 9=颜色, 10=线型, 11=线宽, 12=垂直数字输入, 13=日期区间, 999=自定义) */
   type: number;
   /** 是否为数字 (1=数字, 0=字符串) */
-  isnum: number;
+  isnum: 0 | 1;
   /** 标签文本 */
   label?: string;
   /** 默认值 */
@@ -30,13 +30,13 @@ export interface FieldConfig {
   /** 最小长度 */
   minlen?: number;
   /** 是否必填 */
-  required?: number;
+  required?: 0 | 1;
   /** 是否禁用 */
-  disabled?: boolean;
+  disabled?: 0 | 1;
   /** 是否隐藏 (支持函数，接收当前所有表单值) */
-  hide?: boolean | ((values: Record<string, any>) => boolean);
+  hide?: 0 | 1 | ((values: Record<string, any>) => boolean);
   /** 是否显示 (支持函数, 与 hide 互斥，接收当前所有表单值) */
-  show?: boolean | ((values: Record<string, any>) => boolean);
+  show?: 0 | 1 | ((values: Record<string, any>) => boolean);
   /** 占位文字 */
   placeholder?: string;
   /** 最外层 div 类名 */
@@ -53,7 +53,7 @@ export interface FieldConfig {
   options?: {
     value: any;
     name: any;
-    disabled?: number;
+    disabled?: 0 | 1;
     extendcontrol?: ReactNode;
     className?: string;
   }[];
@@ -77,11 +77,11 @@ export interface FieldConfig {
   /** type=8 的菜单项 */
   menus?: { name: string; action: () => void }[];
   /** type=8 禁用按钮 */
-  disabledBtn?: boolean;
+  disabledBtn?: 0 | 1;
   /** type=8 按钮点击 */
   btnClick?: () => void;
   /** type=8 是否显示菜单 */
-  showMenu?: boolean;
+  showMenu?: 0 | 1;
   /** type=3 复选框勾选态类名 */
   checkedClassName?: string;
   /** type=4 单选组按钮类名 */

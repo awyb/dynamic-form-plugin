@@ -57,7 +57,9 @@ export function useDynamicForm<T extends FieldValues = Record<string, any>>(
   // 脏检测的基准值，回填后同步更新
   const baselineRef = useRef<Record<string, any>>((initialValues ?? {}) as Record<string, any>)
   const baseline = baselineRef.current
-  const isDirty = Object.keys(currentValues).some(key => currentValues[key] !== baseline[key])
+  const isDirty = Object.keys(currentValues).some(
+    key => JSON.stringify(currentValues[key]) !== JSON.stringify(baseline[key])
+  )
   // 首轮已通过 initialValues 合并，这里预填 key 跳过 effect 首轮重复执行
   const initKey =
     autoBackfill && data ? JSON.stringify(initialValues) : ""

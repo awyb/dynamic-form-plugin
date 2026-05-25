@@ -85,12 +85,12 @@ interface FormItemContentProps {
   unit?: string | React.ReactNode;
   labelclass?: string;
   unitclass?: string;
-  hide?: boolean | ((values: Record<string, any>) => boolean);
-  show?: boolean | ((values: Record<string, any>) => boolean);
+  hide?: 0 | 1 | ((values: Record<string, any>) => boolean);
+  show?: 0 | 1 | ((values: Record<string, any>) => boolean);
   /** 当前所有表单值（用于 hide/show 动态判断） */
   values?: Record<string, any>;
   sectionbox?: string;
-  disabled?: boolean;
+  disabled?: 0 | 1;
   className?: string;
   error?: string;
   /** 设为 true 时不渲染 <label for=...> 而是纯 <span>，用于 RadioGroup 等非标控件 */
@@ -123,7 +123,7 @@ export function FormItemContent({
       className={cn(
         "w-full",
         className_,
-        isShown === false ? "hidden" : "",
+        !isShown ? "hidden" : "",
         className,
       )}
     >
