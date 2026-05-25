@@ -1,6 +1,11 @@
 # dynamic-form-plugin
 
+[![npm](https://img.shields.io/npm/v/dynamic-form-plugin)](https://www.npmjs.com/package/dynamic-form-plugin)
+[![GitHub](https://img.shields.io/badge/GitHub-repo-blue)](https://github.com/awyb/dynamic-form-plugin)
+
 声明式动态表单插件 — 基于 react-hook-form + shadcn/ui 的 Schema 驱动表单渲染引擎。
+
+![demo](./demo.png)
 
 ## 安装
 
