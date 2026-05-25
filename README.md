@@ -5,7 +5,7 @@
 
 声明式动态表单插件 — 基于 react-hook-form + shadcn/ui 的 Schema 驱动表单渲染引擎。
 
-![demo](https://raw.githubusercontent.com/awyb/dynamic-form-plugin/main/demo.png)
+![demo](https://unpkg.com/dynamic-form-plugin/demo.png)
 
 ## 安装
 
